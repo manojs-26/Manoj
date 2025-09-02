@@ -107,51 +107,63 @@ user_problem_statement: "MRI noise masking app with adaptive soundscapes to redu
 backend:
   - task: "MRI Pattern API endpoints"
     implemented: true
-    working: false  # needs testing
+    working: true
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Implemented comprehensive MRI pattern management with default patterns for Brain T1, Spine, and Knee scans. Includes sequence patterns with frequency/intensity data."
+      - working: true
+        agent: "testing"
+        comment: "✅ ALL MRI Pattern endpoints working perfectly. GET /api/mri-patterns returns 3 default patterns (Brain T1, Spine, Knee) with proper medical frequency ranges (1.5-2.5kHz, 115-122dB). GET /api/mri-patterns/{id} retrieves specific patterns correctly. POST /api/mri-patterns creates new patterns successfully. All patterns have proper sequence_pattern data with frequency/intensity/duration. Error handling works (404 for invalid IDs). Medical use case validated - frequencies are within typical MRI range (1-4kHz)."
 
   - task: "Sound Profile API endpoints"
     implemented: true
-    working: false  # needs testing
+    working: true
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Implemented sound profile management with nature sounds, white noise, and ambient options. Includes masking effectiveness calculations."
+      - working: true
+        agent: "testing"
+        comment: "✅ ALL Sound Profile endpoints working perfectly. GET /api/sound-profiles returns 5 default profiles (Ocean Waves, Forest Rain, White Noise, Pink Noise, Ambient Meditation). Each profile has proper masking_effectiveness data structure with low_freq, mid_freq, high_freq values (0-1 range). GET /api/sound-profiles/{id} retrieves specific profiles correctly. POST /api/sound-profiles creates new profiles successfully. Error handling works (404 for invalid IDs). All effectiveness values are medically reasonable for noise masking."
 
   - task: "User Session Management API"
     implemented: true
-    working: false  # needs testing
+    working: true
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Implemented session creation, tracking, and completion with comfort ratings. Links MRI patterns with sound profiles."
+      - working: true
+        agent: "testing"
+        comment: "✅ ALL Session Management endpoints working perfectly. POST /api/sessions creates sessions with valid MRI pattern + sound profile IDs, properly validates IDs (400 error for invalid). GET /api/sessions/{id} retrieves session details correctly (404 for invalid). PUT /api/sessions/{id}/complete completes sessions with comfort ratings (1-10 scale), validates rating range (400 for invalid ratings >10). Session tracking includes start_time, volume_level, completed status. Perfect for patient MRI experience tracking."
 
   - task: "Masking Effectiveness Calculator"
     implemented: true
-    working: false  # needs testing
+    working: true
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "medium"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Implemented algorithm to calculate how effective a sound profile will be for masking specific MRI frequencies."
+      - working: true
+        agent: "testing"
+        comment: "✅ Masking Effectiveness Calculator working perfectly. GET /api/masking-effectiveness/{mri_id}/{sound_id} calculates effectiveness correctly. Frequency range logic verified: <1000Hz=low_freq, 1000-3000Hz=mid_freq, >3000Hz=high_freq. Returns effectiveness_score (0-1), mri_frequency, sound_type, recommended_volume. All test patterns (1500-2500Hz) correctly categorized as mid_freq. Volume calculations appropriate (effectiveness + 0.2, capped at 1.0). Error handling works (404 for invalid IDs). Perfect for real-time MRI noise masking guidance."
 
 frontend:
   - task: "MRI Pattern Selection Interface"
